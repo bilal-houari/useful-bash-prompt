@@ -30,7 +30,7 @@ get_venv() {
 get_git_branch() {
     local branch=$(git branch --show-current 2>/dev/null)
     if [[ -n "$branch" ]]; then
-        echo "${BOLD_LIGHT_MAGENTA}$branch${RESET}"
+        echo "${BOLD_LIGHT_MAGENTA}$branch${RESET} "
     fi
 }
 
@@ -91,7 +91,7 @@ set_prompt() {
     local changes_tracking=""
 
     if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-        on="${BOLD_WHITE}on${RESET}"
+        on="${BOLD_WHITE}on${RESET} "
         git_branch=$(get_git_branch)
         git_status=$(get_git_status)
         changes_tracking=$(get_unstaged_changes)$(get_staged_changes)$(get_untracked_files)
@@ -104,7 +104,7 @@ set_prompt() {
         venv=$(get_venv)
     fi
 
-    PS1="$in $current_dir $on $git_branch $git_status$changes_tracking$venv\n$line_start $user$at$host $colon"
+    PS1="$in $current_dir $on$git_branch$git_status$changes_tracking$venv\n$line_start $user$at$host $colon"
 }
 
 # Call the set_prompt function
