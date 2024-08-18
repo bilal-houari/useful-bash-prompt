@@ -18,6 +18,14 @@ BOLD_LIGHT_GRAY="\[\e[1;37m\]"
 BOLD_WHITE="\[\e[1;97m\]"
 RESET="\[\e[0m\]"
 
+# Function to get the current Python virtual environment
+get_venv() {
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        local venv_name=$(basename "$VIRTUAL_ENV")
+        echo "${BOLD_LIGHT_CYAN}($venv_name)${RESET}"
+    fi
+}
+
 # Function to get the current git branch
 get_git_branch() {
     local branch=$(git branch --show-current 2>/dev/null)
@@ -89,7 +97,14 @@ set_prompt() {
         changes_tracking=$(get_unstaged_changes)$(get_staged_changes)$(get_untracked_files)
     fi
 
-    PS1="$in $current_dir $on $git_branch $git_status$changes_tracking\n$line_start $user$at$host $colon"
+    local venv=""
+
+    if [[ -n "$VIRTUAL_ENV" ]]; then
+        # **If active, fill the venv variable**
+        venv=$(get_venv)
+    fi
+
+    PS1="$in $current_dir $on $git_branch $git_status$changes_tracking$venv\n$line_start $user$at$host $colon"
 }
 
 # Call the set_prompt function
